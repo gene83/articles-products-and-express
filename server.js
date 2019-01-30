@@ -15,6 +15,10 @@ app.use(methodOverride('_method'));
 app.use('/products', products);
 app.use('/articles', articles);
 
+app.get('/', (req, res) => {
+  res.render('home');
+});
+
 app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'main.hbs' }));
 app.set('view engine', '.hbs');
 
