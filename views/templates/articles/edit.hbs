@@ -10,6 +10,10 @@
   <input type="text" name="body" placeholder="{{body}}">
   <input type="submit">
 </form>
+
+<form action="/articles/{{urlTitle}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="Remove">
+</form>
 {{/with}}
 
 {{#if errorData}}
