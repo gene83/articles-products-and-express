@@ -1,0 +1,16 @@
+{{#with product}}
+<h1>{{name}}</h1>
+<ul>
+  <li>
+    Price: {{price}}
+  </li>
+  <li>
+    Inventory: {{inventory}}
+  </li>
+</ul>
+{{/with}}
+
+{{#if deleteSuccessful}}
+{{else}}
+<h3>Product: {{id}} could not be deleted because it could not be found</h3>
+{{/if}}

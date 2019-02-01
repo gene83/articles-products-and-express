@@ -1,0 +1,11 @@
+{{#if deleteSuccessful}}
+<h3>Article: "{{article.title}}" has been successfully deleted</h3>
+{{/if}}
+
+<h1>Article List:</h1>
+
+{{#each articles}}
+<h2>{{this.title}}</h2>
+<h4>by: {{this.author}}</h4>
+<p>{{this.body}}</p>
+{{/each}}
