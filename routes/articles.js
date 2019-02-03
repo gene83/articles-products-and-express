@@ -2,81 +2,83 @@
 
 const express = require('express');
 const router = express.Router();
-const articles = require('../db/articles');
-
-const data = {
-  articles: articles.all(),
-  article: undefined,
-  errorData: undefined,
-  deleteSuccessful: false,
-  urlTitle: undefined
-};
+const knex = require('../db');
 
 router.post('/', (req, res) => {
-  data.errorData = undefined;
-
-  if (articles.isProperData(req.body) !== true) {
-    let reqErrors = articles.isProperData(req.body);
-    data.errorData = reqErrors;
-    return res.redirect('/articles/new');
-  }
-
-  articles.add(req.body);
-  res.redirect('/articles');
+  knex('articles')
+    .insert({
+      url_title: encodeURI(req.body.title),
+      title: req.body.title,
+      author: req.body.author,
+      body: req.body.body
+    })
+    .then(() => {
+      res.redirect('/articles');
+    });
 });
 
-router.put('/:urlTitle', (req, res) => {
-  let urlTitle = req.params.urlTitle;
+router.put('/:url_title', (req, res) => {
+  let url_title = req.params.url_title;
+  let updatedArticle = req.body;
 
-  data.errorData = undefined;
+  updatedArticle.url_title = url_title;
 
-  if (articles.isProperData(req.body) !== true) {
-    let reqErrors = articles.isProperData(req.body);
-
-    data.errorData = reqErrors;
-    return res.redirect(`/articles/${urlTitle}/edit`);
-  }
-
-  articles.editByUrlTitle(urlTitle, req.body);
-  res.redirect(`/articles/${urlTitle}`);
+  knex('articles')
+    .where('url_title', '=', url_title)
+    .update(updatedArticle)
+    .then(() => {
+      res.redirect(`/articles/${url_title}`);
+    });
 });
 
-router.delete('/:urlTitle', (req, res) => {
-  let urlTitle = req.params.urlTitle;
+router.delete('/:url_title', (req, res) => {
+  let url_title = req.params.url_title;
 
-  if (!articles.getByUrlTitle(urlTitle)) {
-    data.deleteSuccessful = false;
-    return res.redirect(`/articles/${urlTitle}`);
-  }
-
-  data.article = articles.getByUrlTitle(urlTitle);
-  articles.deleteByUrlTitle(urlTitle);
-  data.deleteSuccessful = true;
-  res.redirect(`/articles`);
+  knex('articles')
+    .where('url_title', '=', url_title)
+    .delete()
+    .then(() => {
+      res.redirect(`/articles`);
+    });
 });
 
 router.get('/', (req, res) => {
-  res.render('templates/articles/index', data);
+  knex('articles')
+    .select('title', 'author', 'body')
+    .then(articles => {
+      const data = {
+        articles: articles
+      };
+
+      res.render('templates/articles/index', data);
+    });
 });
 
 router.get('/new', (req, res) => {
-  res.render('templates/articles/new', data);
+  res.render('templates/articles/new');
 });
 
-router.get('/:urlTitle', (req, res) => {
-  let urlTitle = req.params.urlTitle;
+router.get('/:url_title', (req, res) => {
+  let url_title = req.params.url_title;
 
-  data.urlTitle = urlTitle;
-  data.article = articles.getByUrlTitle(urlTitle);
-  res.render('templates/articles/article', data);
+  knex('articles')
+    .select('title', 'author', 'body')
+    .where('url_title', '=', url_title)
+    .then(article => {
+      res.render('templates/articles/article', article[0]);
+    });
 });
 
-router.get('/:urlTitle/edit', (req, res) => {
-  let urlTitle = req.params.urlTitle;
+router.get('/:url_title/edit', (req, res) => {
+  let url_title = req.params.url_title;
 
-  data.urlTitle = urlTitle;
-  data.article = articles.getByUrlTitle(urlTitle);
-  res.render('templates/articles/edit', data);
+  knex('articles')
+    .select('url_title', 'title', 'author', 'body')
+    .where('url_title', '=', url_title)
+    .then(article => {
+      console.log(article);
+      res.render('templates/articles/edit', article[0]);
+    });
 });
 
 module.exports = router;
