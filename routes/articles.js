@@ -12,6 +12,8 @@ const renderData = {
 };
 
 router.post('/', (req, res) => {
+  renderData.error = null;
+
   knex('articles')
     .insert({
       url_title: encodeURI(req.body.title),
@@ -32,6 +34,7 @@ router.put('/:url_title', (req, res) => {
   let url_title = req.params.url_title;
   let updatedArticle = req.body;
 
+  renderData.error = null;
   updatedArticle.url_title = encodeURI(req.body.title);
 
   knex('articles')
@@ -48,6 +51,8 @@ router.put('/:url_title', (req, res) => {
 
 router.delete('/:url_title', (req, res) => {
   let url_title = req.params.url_title;
+
+  renderData.error = null;
 
   knex('articles')
     .where('url_title', '=', url_title)

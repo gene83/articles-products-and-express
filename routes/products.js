@@ -12,6 +12,8 @@ const renderData = {
 };
 
 router.post('/', (req, res) => {
+  renderData.error = null;
+
   knex('products')
     .insert({
       name: req.body.name,
@@ -30,6 +32,8 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   let id = req.params.id;
   let updatedProduct = req.body;
+
+  renderData.error = null;
   updatedProduct.price = parseInt(updatedProduct.price);
   updatedProduct.inventory = parseInt(updatedProduct.inventory);
 
@@ -47,6 +51,8 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   let id = req.params.id;
+
+  renderData.error = null;
 
   knex('products')
     .where('id', '=', id)
