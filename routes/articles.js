@@ -45,7 +45,7 @@ router.put('/:url_title', (req, res) => {
     })
     .catch(error => {
       renderData.error = error;
-      res.redirect(`/articles/${updatedArticle.url_title}/edit`);
+      res.redirect(`/articles/${renderData.article.url_title}/edit`);
     });
 });
 
