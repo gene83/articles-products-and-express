@@ -4,6 +4,12 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../db');
 
+const renderData = {
+  productList: null,
+  product: null,
+  error: null
+};
+
 router.post('/', (req, res) => {
   knex('products')
     .insert({
@@ -13,6 +19,11 @@ router.post('/', (req, res) => {
     })
     .then(() => {
       res.redirect('/products');
+    })
+    .catch(error => {
+      console.log(error);
+
+      res.redirect('/products/new');
     });
 });
 
@@ -27,6 +38,10 @@ router.put('/:id', (req, res) => {
     .update(updatedProduct)
     .then(() => {
       res.redirect(`/products/${id}`);
+    })
+    .catch(error => {
+      console.log(error);
+      res.redirect(`/products/${id}/edit`);
     });
 });
 
@@ -38,6 +53,9 @@ router.delete('/:id', (req, res) => {
     .delete()
     .then(() => {
       res.redirect(`/products`);
+    })
+    .catch(error => {
+      res.redirect(`/products/${id}`);
     });
 });
 
@@ -45,11 +63,8 @@ router.get('/', (req, res) => {
   knex('products')
     .select('name', 'price', 'inventory')
     .then(productList => {
-      const data = {
-        products: productList
-      };
-
-      res.render('templates/products/index', data);
+      renderData.productList = productList;
+      res.render('templates/products/index', renderData);
     });
 });
 
@@ -64,7 +79,8 @@ router.get('/:id', (req, res) => {
     .select('id', 'name', 'price', 'inventory')
     .where('id', '=', id)
     .then(product => {
-      res.render('templates/products/product', product[0]);
+      renderData.product = product[0];
+      res.render('templates/products/product', renderData);
     });
 });
 
@@ -75,7 +91,8 @@ router.get('/:id/edit', (req, res) => {
     .select('id', 'name', 'price', 'inventory')
     .where('id', '=', id)
     .then(product => {
-      res.render('templates/products/edit', product[0]);
+      renderData.product = product[0];
+      res.render('templates/products/edit', renderData);
     });
 });
 

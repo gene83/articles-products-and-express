@@ -1,3 +1,5 @@
+{{#with product}}
+
 <h1>Edit Product: {{id}}</h1>
 
 <form action="/products/{{id}}?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
@@ -13,3 +15,5 @@
 <form action="/products/{{this.id}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
   <input type="submit" value="Remove">
 </form>
+
+{{/with}}

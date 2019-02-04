@@ -1,3 +1,5 @@
+{{#with article}}
+
 <h1>Edit Article: {{title}}</h1>
 
 <form action="/articles/{{url_title}}?_method=PUT" method='POST' enctype="application/x-www-form-urlencoded">
@@ -13,3 +15,5 @@
 <form action="/articles/{{url_title}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
   <input type="submit" value="Remove">
 </form>
+
+{{/with}}

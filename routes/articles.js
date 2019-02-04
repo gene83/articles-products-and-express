@@ -4,6 +4,12 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../db');
 
+const renderData = {
+  articleList: null,
+  article: null,
+  error: null
+};
+
 router.post('/', (req, res) => {
   knex('articles')
     .insert({
@@ -14,6 +20,9 @@ router.post('/', (req, res) => {
     })
     .then(() => {
       res.redirect('/articles');
+    })
+    .catch(error => {
+      res.redirect('/articles/new');
     });
 });
 
@@ -21,13 +30,16 @@ router.put('/:url_title', (req, res) => {
   let url_title = req.params.url_title;
   let updatedArticle = req.body;
 
-  updatedArticle.url_title = url_title;
+  updatedArticle.url_title = encodeURI(req.body.title);
 
   knex('articles')
     .where('url_title', '=', url_title)
     .update(updatedArticle)
     .then(() => {
-      res.redirect(`/articles/${url_title}`);
+      res.redirect(`/articles/${updatedArticle.url_title}`);
+    })
+    .catch(error => {
+      res.redirect(`/articles/${updatedArticle.url_title}/edit`);
     });
 });
 
@@ -39,18 +51,18 @@ router.delete('/:url_title', (req, res) => {
     .delete()
     .then(() => {
       res.redirect(`/articles`);
+    })
+    .catch(error => {
+      res.redirect(`/article/${url_title}`);
     });
 });
 
 router.get('/', (req, res) => {
   knex('articles')
     .select('title', 'author', 'body')
-    .then(articles => {
-      const data = {
-        articles: articles
-      };
-
-      res.render('templates/articles/index', data);
+    .then(articleList => {
+      renderData.articleList = articleList;
+      res.render('templates/articles/index', renderData);
     });
 });
 
@@ -65,7 +77,8 @@ router.get('/:url_title', (req, res) => {
     .select('title', 'author', 'body')
     .where('url_title', '=', url_title)
     .then(article => {
-      res.render('templates/articles/article', article[0]);
+      renderData.article = article[0];
+      res.render('templates/articles/article', renderData);
     });
 });
 
@@ -76,8 +89,8 @@ router.get('/:url_title/edit', (req, res) => {
     .select('url_title', 'title', 'author', 'body')
     .where('url_title', '=', url_title)
     .then(article => {
-      console.log(article);
-      res.render('templates/articles/edit', article[0]);
+      renderData.article = article[0];
+      res.render('templates/articles/edit', renderData);
     });
 });
 
