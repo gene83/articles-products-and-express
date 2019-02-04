@@ -2,6 +2,10 @@
 <h3>Product: {{product.id}} was successfully deleted.</h3>
 {{/if}}
 
+<form action="/products/new" method="GET" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="Add Product">
+</form>
+
 <h1>Product List:</h1>
 
 {{#each productList}}
