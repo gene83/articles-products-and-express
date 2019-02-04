@@ -78,7 +78,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/new', (req, res) => {
-  res.render('templates/articles/new');
+  res.render('templates/articles/new', renderData);
 });
 
 router.get('/:url_title', (req, res) => {

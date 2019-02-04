@@ -5,14 +5,14 @@ const router = express.Router();
 const knex = require('../db');
 
 const renderData = {
-  productList: null,
-  product: null,
-  error: null,
+  productList: undefined,
+  product: undefined,
+  error: undefined,
   deleteSuccessful: false
 };
 
 router.post('/', (req, res) => {
-  renderData.error = null;
+  renderData.error = undefined;
 
   knex('products')
     .insert({
@@ -33,7 +33,7 @@ router.put('/:id', (req, res) => {
   let id = req.params.id;
   let updatedProduct = req.body;
 
-  renderData.error = null;
+  renderData.error = undefined;
   updatedProduct.price = parseInt(updatedProduct.price);
   updatedProduct.inventory = parseInt(updatedProduct.inventory);
 
@@ -52,7 +52,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   let id = req.params.id;
 
-  renderData.error = null;
+  renderData.error = undefined;
 
   knex('products')
     .where('id', '=', id)
@@ -73,13 +73,12 @@ router.get('/', (req, res) => {
     .select('id', 'name', 'price', 'inventory')
     .then(productList => {
       renderData.productList = productList;
-      console.log(renderData.productList[0]);
       res.render('templates/products/index', renderData);
     });
 });
 
 router.get('/new', (req, res) => {
-  res.render('templates/products/new');
+  res.render('templates/products/new', renderData);
 });
 
 router.get('/:id', (req, res) => {
