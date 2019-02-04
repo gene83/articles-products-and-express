@@ -11,3 +11,8 @@
 </ul>
 
 {{/with}}
+
+{{#if deleteSuccessful}}
+{{else}}
+<h3>Product: {{product.id}} could not be deleted due to {{error}}</h3>
+{{/if}}

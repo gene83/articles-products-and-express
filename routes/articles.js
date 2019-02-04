@@ -7,7 +7,8 @@ const knex = require('../db');
 const renderData = {
   articleList: null,
   article: null,
-  error: null
+  error: null,
+  deleteSuccessful: false
 };
 
 router.post('/', (req, res) => {
@@ -22,6 +23,7 @@ router.post('/', (req, res) => {
       res.redirect('/articles');
     })
     .catch(error => {
+      renderData.error = error;
       res.redirect('/articles/new');
     });
 });
@@ -39,6 +41,7 @@ router.put('/:url_title', (req, res) => {
       res.redirect(`/articles/${updatedArticle.url_title}`);
     })
     .catch(error => {
+      renderData.error = error;
       res.redirect(`/articles/${updatedArticle.url_title}/edit`);
     });
 });
@@ -50,9 +53,12 @@ router.delete('/:url_title', (req, res) => {
     .where('url_title', '=', url_title)
     .delete()
     .then(() => {
+      renderData.deleteSuccessful = true;
       res.redirect(`/articles`);
     })
     .catch(error => {
+      renderData.deleteSuccessful = false;
+      renderData.error = error;
       res.redirect(`/article/${url_title}`);
     });
 });
