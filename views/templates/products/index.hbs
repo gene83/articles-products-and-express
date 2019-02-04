@@ -18,4 +18,7 @@
     Inventory: {{this.inventory}}
   </li>
 </ul>
+<form action="/products/{{this.id}}/edit" method="GET" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="edit">
+</form>
 {{/each}}

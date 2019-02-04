@@ -70,9 +70,10 @@ router.delete('/:id', (req, res) => {
 
 router.get('/', (req, res) => {
   knex('products')
-    .select('name', 'price', 'inventory')
+    .select('id', 'name', 'price', 'inventory')
     .then(productList => {
       renderData.productList = productList;
+      console.log(renderData.productList[0]);
       res.render('templates/products/index', renderData);
     });
 });

@@ -70,7 +70,7 @@ router.delete('/:url_title', (req, res) => {
 
 router.get('/', (req, res) => {
   knex('articles')
-    .select('title', 'author', 'body')
+    .select('url_title', 'title', 'author', 'body')
     .then(articleList => {
       renderData.articleList = articleList;
       res.render('templates/articles/index', renderData);
@@ -85,7 +85,7 @@ router.get('/:url_title', (req, res) => {
   let url_title = req.params.url_title;
 
   knex('articles')
-    .select('title', 'author', 'body')
+    .select('url_title', 'title', 'author', 'body')
     .where('url_title', '=', url_title)
     .then(article => {
       renderData.article = article[0];
