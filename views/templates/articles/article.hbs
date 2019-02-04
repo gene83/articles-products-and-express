@@ -1,0 +1,12 @@
+{{#with article}}
+
+<h2>{{title}}</h2>
+<h4>by: {{author}}</h4>
+<p>{{body}}</p>
+
+{{/with}}
+
+{{#if deleteSuccessful}}
+{{else}}
+<h3>Article: {{article.urlTitle}} could not be deleted due to {{error}}</h3>
+{{/if}}

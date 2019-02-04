@@ -1,0 +1,23 @@
+{{#with product}}
+
+<h1>Edit Product: {{id}}</h1>
+
+<form action="/products/{{id}}?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
+  Name:
+  <input type="text" name="name" placeholder="{{name}}">
+  Price:
+  <input type="text" name="price" placeholder="{{price}}">
+  Inventory:
+  <input type="text" name="inventory" placeholder="{{inventory}}">
+  <input type="submit">
+</form>
+
+<form action="/products/{{this.id}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="Remove">
+</form>
+
+{{/with}}
+
+{{#if error}}
+{{error}}
+{{/if}}

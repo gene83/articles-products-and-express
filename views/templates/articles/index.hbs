@@ -1,0 +1,18 @@
+{{#if deleteSuccessful}}
+<h3>Article: "{{article.title}}" has been successfully deleted</h3>
+{{/if}}
+
+<form action="/articles/new" method="GET" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="Add Article">
+</form>
+
+<h1>Article List:</h1>
+
+{{#each articleList}}
+<h2>{{this.title}}</h2>
+<h4>by: {{this.author}}</h4>
+<p>{{this.body}}</p>
+<form action="/articles/{{this.url_title}}/edit" method="GET" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="edit">
+</form>
+{{/each}}

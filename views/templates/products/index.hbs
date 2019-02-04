@@ -1,0 +1,24 @@
+{{#if deleteSuccessful}}
+<h3>Product: {{product.id}} was successfully deleted.</h3>
+{{/if}}
+
+<form action="/products/new" method="GET" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="Add Product">
+</form>
+
+<h1>Product List:</h1>
+
+{{#each productList}}
+<h3>Product {{this.id}}: {{this.name}}</h3>
+<ul>
+  <li>
+    Price: {{this.price}}
+  </li>
+  <li>
+    Inventory: {{this.inventory}}
+  </li>
+</ul>
+<form action="/products/{{this.id}}/edit" method="GET" enctype="application/x-www-form-urlencoded">
+  <input type="submit" value="edit">
+</form>
+{{/each}}

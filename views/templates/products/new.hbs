@@ -1,0 +1,15 @@
+<h1>Add Product:</h1>
+
+<form action="/products" method="POST" enctype="application/x-www-form-urlencoded">
+  Name:
+  <input type="text" name="name">
+  Price:
+  <input type="text" name="price">
+  Inventory:
+  <input type="text" name="inventory">
+  <input type="submit">
+</form>
+
+{{#if error}}
+{{error}}
+{{/if}}
